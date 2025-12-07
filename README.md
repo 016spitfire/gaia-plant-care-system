@@ -35,10 +35,25 @@ Built for real-world use by a mobile dog grooming business transitioning to a pl
 ## Tech Stack
 
 - **React 18** - UI framework
-- **Vite** - Build tool
-- **IndexedDB** - Local database for plant data and photos
+- **Vite** - Build tool with PWA plugin
+- **IndexedDB** (via `idb`) - Local database for plant data and photos
 - **Service Worker** - Offline support and notifications
 - **PWA** - Installable web app
+
+### Key Dependencies
+
+- **idb** - Promise-based IndexedDB wrapper (cleaner API than raw IndexedDB)
+- **browser-image-compression** - Client-side photo compression before storage
+- **date-fns** - Lightweight date manipulation for watering schedules
+- **vite-plugin-pwa** - Service worker and manifest generation
+
+### Architectural Decisions
+
+**No routing library:** Mobile-first PWA with component-based navigation (modals/slide-ins). Users interact via installed app, not web URLs. Keeps bundle small and UX native-feeling.
+
+**No Redux:** IndexedDB is the source of truth. React Context API + useState sufficient for UI state (current view, selected plant). Avoids Redux boilerplate for simple state needs.
+
+**Native crypto.randomUUID():** Uses browser API instead of uuid library. Zero dependencies, works in all modern browsers, saves bundle size.
 
 ## Getting Started
 
