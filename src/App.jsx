@@ -4,6 +4,7 @@ import PlantForm from "./components/PlantForm";
 import PlantDetail from "./components/PlantDetail";
 import CareReminder from "./components/CareReminder";
 import CustomFieldManager from "./components/CustomFieldManager";
+import AlphaBanner from "./components/AlphaBanner";
 import {
   getAllPlants,
   createPlant,
@@ -138,6 +139,8 @@ const App = () => {
           </button>
         </div>
       </header>
+
+      <AlphaBanner />
 
       <CareReminder
         count={plantsNeedingWater.length}
