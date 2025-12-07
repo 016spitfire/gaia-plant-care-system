@@ -1,5 +1,6 @@
-import { getDB } from './db';
-import { addDays } from 'date-fns';
+import { getDB } from "./db";
+import { addDays } from "date-fns";
+import { normalizeCustomFields } from "../utils/customFields";
 
 /**
  * Create a new plant
@@ -13,17 +14,23 @@ export async function createPlant(plantData) {
   const plant = {
     id: crypto.randomUUID(),
     name: plantData.name,
-    species: plantData.species || '',
+    species: plantData.species || "",
     photo: plantData.photo || null, // Blob from compressed image
     wateringFrequency: plantData.wateringFrequency || 7, // Default 7 days
     lastWatered: plantData.lastWatered || now,
-    nextWatering: plantData.nextWatering || addDays(new Date(plantData.lastWatered || now), plantData.wateringFrequency || 7).toISOString(),
-    notes: plantData.notes || '',
+    nextWatering:
+      plantData.nextWatering ||
+      addDays(
+        new Date(plantData.lastWatered || now),
+        plantData.wateringFrequency || 7,
+      ).toISOString(),
+    notes: plantData.notes || "",
+    customFields: normalizeCustomFields(plantData.customFields || {}),
     createdAt: now,
     updatedAt: now,
   };
 
-  await db.add('plants', plant);
+  await db.add("plants", plant);
   return plant;
 }
 
@@ -33,7 +40,13 @@ export async function createPlant(plantData) {
  */
 export async function getAllPlants() {
   const db = await getDB();
-  return await db.getAll('plants');
+  const plants = await db.getAll("plants");
+
+  // Normalize custom fields for all plants
+  return plants.map((plant) => ({
+    ...plant,
+    customFields: normalizeCustomFields(plant.customFields || {}),
+  }));
 }
 
 /**
@@ -43,7 +56,14 @@ export async function getAllPlants() {
  */
 export async function getPlant(id) {
   const db = await getDB();
-  return await db.get('plants', id);
+  const plant = await db.get("plants", id);
+
+  if (!plant) return undefined;
+
+  return {
+    ...plant,
+    customFields: normalizeCustomFields(plant.customFields || {}),
+  };
 }
 
 /**
@@ -54,7 +74,7 @@ export async function getPlant(id) {
  */
 export async function updatePlant(id, updates) {
   const db = await getDB();
-  const plant = await db.get('plants', id);
+  const plant = await db.get("plants", id);
 
   if (!plant) {
     throw new Error(`Plant with id ${id} not found`);
@@ -70,10 +90,13 @@ export async function updatePlant(id, updates) {
   if (updates.lastWatered || updates.wateringFrequency) {
     const lastWatered = updates.lastWatered || plant.lastWatered;
     const frequency = updates.wateringFrequency || plant.wateringFrequency;
-    updatedPlant.nextWatering = addDays(new Date(lastWatered), frequency).toISOString();
+    updatedPlant.nextWatering = addDays(
+      new Date(lastWatered),
+      frequency,
+    ).toISOString();
   }
 
-  await db.put('plants', updatedPlant);
+  await db.put("plants", updatedPlant);
   return updatedPlant;
 }
 
@@ -84,7 +107,7 @@ export async function updatePlant(id, updates) {
  */
 export async function deletePlant(id) {
   const db = await getDB();
-  await db.delete('plants', id);
+  await db.delete("plants", id);
 }
 
 /**
@@ -103,10 +126,10 @@ export async function waterPlant(id) {
  */
 export async function getPlantsNeedingWater() {
   const db = await getDB();
-  const allPlants = await db.getAll('plants');
+  const allPlants = await db.getAll("plants");
   const now = new Date();
 
-  return allPlants.filter(plant => {
+  return allPlants.filter((plant) => {
     const nextWatering = new Date(plant.nextWatering);
     return nextWatering <= now;
   });
