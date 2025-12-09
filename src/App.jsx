@@ -5,6 +5,7 @@ import PlantDetail from "./components/PlantDetail";
 import CareReminder from "./components/CareReminder";
 import CustomFieldManager from "./components/CustomFieldManager";
 import AlphaBanner from "./components/AlphaBanner";
+import InstallPrompt from "./components/InstallPrompt";
 import {
   getAllPlants,
   createPlant,
@@ -193,6 +194,8 @@ const App = () => {
           onFieldsChanged={refreshPlants}
         />
       )}
+
+      <InstallPrompt />
     </div>
   );
 };
