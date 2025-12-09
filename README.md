@@ -2,6 +2,28 @@
 
 🌱 A mobile-first PWA for plant enthusiasts to track watering schedules, care routines, and plant health.
 
+---
+
+## ⚠️ ALPHA VERSION - UNDER RAPID DEVELOPMENT
+
+**This application is in active development and not yet feature-complete.**
+
+Currently implemented:
+- ✅ PWA installation (installable to home screen)
+- ✅ Offline support via Service Worker
+- ✅ Plant CRUD operations with photo capture
+- ✅ Watering tracking and custom fields
+- ✅ Mobile-first responsive design
+
+Still in development:
+- ⏳ Push notifications and daily reminders
+- ⏳ Data export/backup functionality
+- ⏳ Advanced care tracking features
+
+**Use at your own risk. Data is stored locally on your device. Backup functionality is not yet implemented.**
+
+---
+
 **Status:** 🚧 Work in Progress
 
 ## Overview

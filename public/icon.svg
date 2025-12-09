@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#10b981" rx="64"/>
+  <g fill="#ffffff">
+    <!-- Leaf left -->
+    <path d="M 256 180 Q 180 180 150 250 Q 180 220 256 220 Z" opacity="0.8"/>
+    <!-- Leaf right -->
+    <path d="M 256 180 Q 332 180 362 250 Q 332 220 256 220 Z" opacity="0.8"/>
+    <!-- Stem -->
+    <rect x="248" y="220" width="16" height="160" rx="8"/>
+    <!-- Pot -->
+    <path d="M 200 360 L 220 420 Q 220 440 240 440 L 272 440 Q 292 440 292 420 L 312 360 Z" fill="#d97706"/>
+  </g>
+</svg>

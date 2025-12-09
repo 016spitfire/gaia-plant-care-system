@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate PWA Icons</title>
+</head>
+<body>
+    <h1>PWA Icon Generator</h1>
+    <p>Right-click each canvas and "Save Image As..." with the filename shown below it.</p>
+
+    <div style="margin: 20px;">
+        <canvas id="icon192" width="192" height="192" style="border: 1px solid black;"></canvas>
+        <p><strong>Save as: pwa-192x192.png</strong></p>
+    </div>
+
+    <div style="margin: 20px;">
+        <canvas id="icon512" width="512" height="512" style="border: 1px solid black;"></canvas>
+        <p><strong>Save as: pwa-512x512.png</strong></p>
+    </div>
+
+    <script>
+        function drawIcon(canvas) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            const scale = size / 512;
+
+            // Background with rounded corners
+            ctx.fillStyle = '#10b981';
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, 64 * scale);
+            ctx.fill();
+
+            // White plant design
+            ctx.fillStyle = '#ffffff';
+
+            // Left leaf
+            ctx.globalAlpha = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(256 * scale, 180 * scale);
+            ctx.quadraticCurveTo(180 * scale, 180 * scale, 150 * scale, 250 * scale);
+            ctx.quadraticCurveTo(180 * scale, 220 * scale, 256 * scale, 220 * scale);
+            ctx.fill();
+
+            // Right leaf
+            ctx.beginPath();
+            ctx.moveTo(256 * scale, 180 * scale);
+            ctx.quadraticCurveTo(332 * scale, 180 * scale, 362 * scale, 250 * scale);
+            ctx.quadraticCurveTo(332 * scale, 220 * scale, 256 * scale, 220 * scale);
+            ctx.fill();
+
+            // Stem
+            ctx.globalAlpha = 1.0;
+            ctx.beginPath();
+            ctx.roundRect(248 * scale, 220 * scale, 16 * scale, 160 * scale, 8 * scale);
+            ctx.fill();
+
+            // Pot
+            ctx.fillStyle = '#d97706';
+            ctx.beginPath();
+            ctx.moveTo(200 * scale, 360 * scale);
+            ctx.lineTo(220 * scale, 420 * scale);
+            ctx.quadraticCurveTo(220 * scale, 440 * scale, 240 * scale, 440 * scale);
+            ctx.lineTo(272 * scale, 440 * scale);
+            ctx.quadraticCurveTo(292 * scale, 440 * scale, 292 * scale, 420 * scale);
+            ctx.lineTo(312 * scale, 360 * scale);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        drawIcon(document.getElementById('icon192'));
+        drawIcon(document.getElementById('icon512'));
+
+        // Auto-download function
+        function downloadCanvas(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        // Auto-download after 1 second
+        setTimeout(() => {
+            downloadCanvas('icon192', 'pwa-192x192.png');
+            setTimeout(() => {
+                downloadCanvas('icon512', 'pwa-512x512.png');
+            }, 500);
+        }, 1000);
+    </script>
+</body>
+</html>
