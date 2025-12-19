@@ -5,6 +5,7 @@ import {
   formatRelativeTime,
   getWateringStatus,
 } from "../utils/scheduling";
+import { getCustomFields } from "../utils/customFields";
 
 /**
  * Plant detail view - full information about a plant
@@ -89,10 +90,10 @@ export default function PlantDetail({
             </div>
           )}
 
-          {plant.customFields && Object.keys(plant.customFields).length > 0 && (
+          {getCustomFields().length > 0 && (
             <div className="detail-section">
               <h3>Custom Fields</h3>
-              {Object.entries(plant.customFields).map(
+              {Object.entries(plant.customFields || {}).map(
                 ([fieldName, value]) =>
                   value && (
                     <p key={fieldName}>

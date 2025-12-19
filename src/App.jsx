@@ -6,6 +6,7 @@ import CareReminder from "./components/CareReminder";
 import CustomFieldManager from "./components/CustomFieldManager";
 import AlphaBanner from "./components/AlphaBanner";
 import InstallPrompt from "./components/InstallPrompt";
+import NotificationSettings from "./components/NotificationSettings";
 import {
   getAllPlants,
   createPlant,
@@ -15,6 +16,7 @@ import {
   getPlantsNeedingWater,
 } from "./db/plants";
 import { initDB } from "./db/db";
+import { updateBadgeCount, clearBadge } from "./utils/notifications";
 import "./App.css";
 
 const App = () => {
@@ -25,6 +27,8 @@ const App = () => {
   const [selectedPlant, setSelectedPlant] = useState(null);
   const [showNeedsWaterOnly, setShowNeedsWaterOnly] = useState(false);
   const [showFieldManager, setShowFieldManager] = useState(false);
+  const [showNotificationSettings, setShowNotificationSettings] =
+    useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   // Initialize database and load plants
@@ -49,6 +53,9 @@ const App = () => {
     const needsWater = await getPlantsNeedingWater();
     setPlants(allPlants);
     setPlantsNeedingWater(needsWater);
+
+    // Update badge count
+    await updateBadgeCount(needsWater.length);
   };
 
   // Handle adding a new plant
@@ -60,6 +67,7 @@ const App = () => {
         photo: formData.photo,
         wateringFrequency: parseInt(formData.wateringFrequency, 10),
         notes: formData.notes,
+        customFields: formData.customFields,
       });
 
       await refreshPlants();
@@ -79,6 +87,7 @@ const App = () => {
         photo: formData.photo,
         wateringFrequency: parseInt(formData.wateringFrequency, 10),
         notes: formData.notes,
+        customFields: formData.customFields,
       });
 
       await refreshPlants();
@@ -128,6 +137,13 @@ const App = () => {
       <header className="app-header">
         <h1>🌱 Gaia Plant Care</h1>
         <div className="header-actions">
+          <button
+            className="manage-fields-btn"
+            onClick={() => setShowNotificationSettings(true)}
+            title="Notification Settings"
+          >
+            🔔
+          </button>
           <button
             className="manage-fields-btn"
             onClick={() => setShowFieldManager(true)}
@@ -192,6 +208,12 @@ const App = () => {
         <CustomFieldManager
           onClose={() => setShowFieldManager(false)}
           onFieldsChanged={refreshPlants}
+        />
+      )}
+
+      {showNotificationSettings && (
+        <NotificationSettings
+          onClose={() => setShowNotificationSettings(false)}
         />
       )}
 
